@@ -33,6 +33,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     endpointsServer project(path: ':backend', configuration: 'endpoints')
+    implementation project (':jokeLib')
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.gms:play-services-ads:18.0.0'
     implementation 'com.google.android.gms:play-services-measurement:17.0.0'

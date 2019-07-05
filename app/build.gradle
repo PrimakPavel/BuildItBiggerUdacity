@@ -35,6 +35,8 @@ dependencies {
     endpointsServer project(path: ':backend', configuration: 'endpoints')
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.gms:play-services-ads:18.0.0'
+    implementation 'com.google.android.gms:play-services-measurement:17.0.0'
+    implementation 'com.google.android.gms:play-services-measurement-sdk:17.0.0'
     implementation 'com.google.api-client:google-api-client:1.25.0'
     implementation 'com.google.http-client:google-http-client-android:1.23.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'

@@ -1,16 +1,3 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:2.0.1'
-    }
-}
-
-repositories {
-    jcenter()
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.cloud.tools.endpoints-framework-client'
 
@@ -41,17 +28,28 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions 'versionType'
+    productFlavors {
+        free {
+            dimension 'versionType'
+            applicationIdSuffix ".free"
+        }
+        paid {
+            dimension 'versionType'
+            applicationIdSuffix ".paid"
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     endpointsServer project(path: ':backend', configuration: 'endpoints')
-    implementation project (':jokeLib')
-    implementation project (':androidJokeLibrary')
+    implementation project(':jokeLib')
+    implementation project(':androidJokeLibrary')
     implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.gms:play-services-ads:18.0.0'
-    implementation 'com.google.android.gms:play-services-measurement:17.0.0'
-    implementation 'com.google.android.gms:play-services-measurement-sdk:17.0.0'
+    freeImplementation 'com.google.android.gms:play-services-ads:18.0.0'
+    freeImplementation 'com.google.android.gms:play-services-measurement:17.0.0'
+    freeImplementation 'com.google.android.gms:play-services-measurement-sdk:17.0.0'
     implementation 'com.google.api-client:google-api-client:1.25.0'
     implementation 'com.google.http-client:google-http-client-android:1.23.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'

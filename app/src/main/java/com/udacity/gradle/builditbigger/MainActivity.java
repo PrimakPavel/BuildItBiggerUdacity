@@ -1,10 +1,12 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,7 +14,9 @@ import com.pavelprymak.androidjokelibrary.JokeActivity;
 import com.pavelprymak.jokelib.Joke;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EndpointsAsyncTask.EndpointsAsyncTaskListener {
+
+    private EndpointsAsyncTask mAsyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAsyncTask != null)
+            mAsyncTask.setListener(null);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,10 +55,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void tellJoke(View view) {
         Joke joke = new Joke();
-        Intent intent = new Intent(this, JokeActivity.class);
-        intent.putExtra(JokeActivity.KEY_JOKE, joke.getJoke());
-        startActivity(intent);
+        Toast.makeText(this, joke.getJoke(), Toast.LENGTH_LONG).show();
+
+        if (mAsyncTask != null && !(mAsyncTask.getStatus() == AsyncTask.Status.RUNNING)) {
+            mAsyncTask.setListener(null);
+            mAsyncTask.cancel(true);
+        }
+        mAsyncTask = new EndpointsAsyncTask();
+        mAsyncTask.setListener(this);
+        mAsyncTask.execute();
     }
 
 
+    @Override
+    public void showJoke(String joke) {
+        Intent intent = new Intent(this, JokeActivity.class);
+        intent.putExtra(JokeActivity.KEY_JOKE, joke);
+        startActivity(intent);
+    }
 }

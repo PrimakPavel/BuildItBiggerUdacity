@@ -22,4 +22,16 @@ allprojects {
     }
 }
 
+// start emulator or device before
+task startAppEngineAndTests {
+    dependsOn = [":backend:appengineStart" , "startAndroidTests"]
+    finalizedBy ":backend:appengineStop"
+}
+
+task startAndroidTests(){
+    shouldRunAfter ":backend:appengineStart"
+    dependsOn ":app:connectedCheck"
+}
+
+
 

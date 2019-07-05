@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,11 +18,13 @@ import com.pavelprymak.jokelib.Joke;
 public class MainActivity extends AppCompatActivity implements EndpointsAsyncTask.EndpointsAsyncTaskListener {
 
     private EndpointsAsyncTask mAsyncTask;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mProgressBar = findViewById(R.id.progressBar);
     }
 
     @Override
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
         super.onDestroy();
         if (mAsyncTask != null)
             mAsyncTask.setListener(null);
+        mAsyncTask = null;
     }
 
     @Override
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
         mAsyncTask = new EndpointsAsyncTask();
         mAsyncTask.setListener(this);
         mAsyncTask.execute();
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
 
@@ -72,5 +77,6 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
         Intent intent = new Intent(this, JokeActivity.class);
         intent.putExtra(JokeActivity.KEY_JOKE, joke);
         startActivity(intent);
+        mProgressBar.setVisibility(View.GONE);
     }
 }
